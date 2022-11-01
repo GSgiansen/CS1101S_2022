@@ -45,16 +45,21 @@ function reorder_statements(statements){
         else{
             const first = head(stmts);
             const split_rest = helper(tail(stmts));
+            
             return is_function_declaration(first)
-                   ? pair(pair(first,head(split_rest)),tail(split_rest))
-                   : pair(head(split_rest),pair(first,tail(split_rest)));
+                   ? pair(pair(first,head(split_rest)),
+                               tail(split_rest))
+                   : pair(head(split_rest),
+                          pair(first,tail(split_rest)));
         }
     }
     const split = helper(statements);
     return append(head(split),tail(split));
 }
 
-
+function detect_unknowns(statements){
+    
+}
 
 function eval_conditional(comp, env) {
    return is_truthy(evaluate(conditional_predicate(comp), env))
