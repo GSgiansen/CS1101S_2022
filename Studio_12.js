@@ -18,6 +18,8 @@ function evaluate(component, env) {
            
            : is_name(component)
            ? lookup_symbol_value(symbol_of_name(component), env)
+           
+           
            : is_block(component)
            ? eval_block(component, env)
            : is_function_declaration(component)
@@ -58,6 +60,7 @@ function reorder_statements(statements){
 }
 //b) look through the symbol tree and detect for undeclared names
 //prog ->(parse) -> treee
+/*
 function check_names(component, env){
     is_literal(component)
     ? "ok"
@@ -69,7 +72,11 @@ function check_names(component, env){
             list(conditional_predicate(component),
                  conditional_consequent(component))))
     
-}
+}*/
+
+//inclass studio
+//idea is to check the look_up_symbol to check the value and see if *unassigned*
+//reference to look_up_symbol
 
 function eval_conditional(comp, env) {
    return is_truthy(evaluate(conditional_predicate(comp), env))
@@ -78,9 +85,11 @@ function eval_conditional(comp, env) {
 }
 
 function eval_sequence(stmts, env) { 
+    //display(stmts);
     if (is_empty_sequence(stmts)) {
         return undefined;
     } else if (is_last_statement(stmts)) {
+        //display(stmts);
         return evaluate(first_statement(stmts), env);
     } else {
         const ignore = evaluate(first_statement(stmts), env);
@@ -161,6 +170,7 @@ function apply(fun, args) {
 // literals
 
 function is_literal(component) {
+    //display(component);
     return is_tagged_list(component, "literal");
 }
 function literal_value(component) {    
@@ -224,7 +234,8 @@ function conditional_alternative(component) {
 function is_sequence(stmt) {
    return is_tagged_list(stmt, "sequence");
 }
-function sequence_statements(stmt) {   
+function sequence_statements(stmt) {
+    //display(stmt);
    return head(tail(stmt));
 }
 function first_statement(stmts) {
@@ -379,12 +390,17 @@ function extend_environment(symbols, vals, base_env) {
 
 //similar to read
 function lookup_symbol_value(symbol, env) {
+    
     function env_loop(env) {
         function scan(symbols, vals) {
             return is_null(symbols)
                    ? env_loop(enclosing_environment(env))//checking the next env
                    : symbol === head(symbols)
-                   ? head(vals)
+                   //changed here 
+                   
+                   ? (head(vals) === "*unassigned*"
+                      ? error(symbol,"Cannot access deez")
+                      : head(vals))
                    : scan(tail(symbols), tail(vals));
         }
         if (env === the_empty_environment) {
@@ -394,7 +410,13 @@ function lookup_symbol_value(symbol, env) {
             return scan(frame_symbols(frame), frame_values(frame));
         }
     }
-    return env_loop(env);
+    
+    let ans =  env_loop(env);
+    display(ans);
+    if (ans === "*unassigned*"){
+        error("reference error");
+    }
+    return ans;
 }
 
 
@@ -524,5 +546,15 @@ parse_and_evaluate(`
     x;
 `);
 */
+
+
+
+
 parse_and_evaluate(
-    `false ? deez(nuts) : 43;`);
+    `const x = y;
+    const y = 42;
+const z = "***" + x + "***";
+ a = 10;
+z;`);
+
+
