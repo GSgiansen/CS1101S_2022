@@ -35,7 +35,7 @@ function evaluate(component, env) {
                            lambda_body(component), env)
            : error(component, "Unknown component:");
 }
-
+//ADDEED REORDER_STATEMENTS
 function reorder_statements(statements){
     function helper(stmts){
         if (is_null(stmts)){
@@ -53,6 +53,8 @@ function reorder_statements(statements){
     const split = helper(statements);
     return append(head(split),tail(split));
 }
+
+
 
 function eval_conditional(comp, env) {
    return is_truthy(evaluate(conditional_predicate(comp), env))
