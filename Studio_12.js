@@ -13,7 +13,9 @@ function evaluate(component, env) {
            : is_conditional(component)
            ? eval_conditional(component, env)
            : is_sequence(component)
-           ? eval_sequence(hoist(sequence_statements(component)), env)
+           //changed here
+           ? eval_sequence(reorder_statements(sequence_statements(component)), env)
+           
            : is_name(component)
            ? lookup_symbol_value(symbol_of_name(component), env)
            : is_block(component)
@@ -32,6 +34,24 @@ function evaluate(component, env) {
            ? make_function(lambda_parameter_symbols(component),
                            lambda_body(component), env)
            : error(component, "Unknown component:");
+}
+
+function reorder_statements(statements){
+    function helper(stmts){
+        if (is_null(stmts)){
+            return pair(null,null);
+            
+        }
+        else{
+            const first = head(stmts);
+            const split_rest = helper(tail(stmts));
+            return is_function_declaration(first)
+                   ? pair(pair(first,head(split_rest)),tail(split_rest))
+                   : pair(head(split_rest),pair(first,tail(split_rest)));
+        }
+    }
+    const split = helper(statements);
+    return append(head(split),tail(split));
 }
 
 function eval_conditional(comp, env) {
@@ -61,6 +81,8 @@ function scan_out_declarations(component) {
            ? list(declaration_symbol(component))
            : null;
 }
+
+
 function hoist(stmts) {
     if (is_empty_sequence(stmts) || is_last_statement(stmts)) {
         return stmts;
@@ -77,6 +99,7 @@ function hoist(stmts) {
     }
     return stmts;
 }
+
 function eval_block(component, env) {
     const body = block_body(component);
     const locals = scan_out_declarations(body);
@@ -287,6 +310,7 @@ function function_declaration_parameters(component) {
     return list_ref(component, 2);
 }
 function function_declaration_body(component) {
+    //display_list(component);
     return list_ref(component, 3);
 }
 function function_decl_to_constant_decl(component) {
@@ -335,11 +359,13 @@ function extend_environment(symbols, vals, base_env) {
                    stringify(vals));
 }
 
+
+//similar to read
 function lookup_symbol_value(symbol, env) {
     function env_loop(env) {
         function scan(symbols, vals) {
             return is_null(symbols)
-                   ? env_loop(enclosing_environment(env))
+                   ? env_loop(enclosing_environment(env))//checking the next env
                    : symbol === head(symbols)
                    ? head(vals)
                    : scan(tail(symbols), tail(vals));
@@ -354,6 +380,8 @@ function lookup_symbol_value(symbol, env) {
     return env_loop(env);
 }
 
+
+//similar to write
 function assign_symbol_value(symbol, val, env) {
     function env_loop(env) {
         function scan(symbols, vals) {
