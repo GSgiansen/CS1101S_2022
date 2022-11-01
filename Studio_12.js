@@ -56,8 +56,18 @@ function reorder_statements(statements){
     const split = helper(statements);
     return append(head(split),tail(split));
 }
-
-function detect_unknowns(statements){
+//b) look through the symbol tree and detect for undeclared names
+//prog ->(parse) -> treee
+function check_names(component, env){
+    is_literal(component)
+    ? "ok"
+    : is_name(component)
+    ? lookup_symbol_value(symbol_of_name(component),env)
+    : is_application(component)
+    ? check_names(
+        make_sequence(
+            list(conditional_predicate(component),
+                 conditional_consequent(component))))
     
 }
 
