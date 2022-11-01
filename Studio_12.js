@@ -13,7 +13,7 @@ function evaluate(component, env) {
            : is_conditional(component)
            ? eval_conditional(component, env)
            : is_sequence(component)
-           ? eval_sequence(hoist(component), env)
+           ? eval_sequence(hoist(sequence_statements(component)), env)
            : is_name(component)
            ? lookup_symbol_value(symbol_of_name(component), env)
            : is_block(component)
