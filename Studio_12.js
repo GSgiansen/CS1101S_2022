@@ -61,7 +61,22 @@ function scan_out_declarations(component) {
            ? list(declaration_symbol(component))
            : null;
 }
-
+function hoist(stmts) {
+    if (is_empty_sequence(stmts) || is_last_statement(stmts)) {
+        return stmts;
+    }
+    const cur = first_statement(stmts);
+    const next = rest_statements(stmts);
+    if (!is_function_declaration(cur)) {
+        const prev = hoist(next);
+        if (is_function_declaration(first_statement(prev))){
+            return pair(first_statement(prev), 
+                    hoist(pair(cur, 
+                               rest_statements(prev))));
+        }
+    }
+    return stmts;
+}
 function eval_block(component, env) {
     const body = block_body(component);
     const locals = scan_out_declarations(body);
