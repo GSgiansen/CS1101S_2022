@@ -412,7 +412,7 @@ function lookup_symbol_value(symbol, env) {
     }
     
     let ans =  env_loop(env);
-    display(ans);
+    //display(ans);
     if (ans === "*unassigned*"){
         error("reference error");
     }
