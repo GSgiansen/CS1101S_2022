@@ -505,6 +505,7 @@ function parse_and_evaluate(program) {
 }
 
 // test cases
+/*
 parse_and_evaluate(`  
     const x = f(8);
     function f(y) {		
@@ -512,3 +513,6 @@ parse_and_evaluate(`
     }
     x;
 `);
+*/
+parse_and_evaluate(
+    `false ? deez(nuts) : 43;`);
