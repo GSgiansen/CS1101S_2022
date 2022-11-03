@@ -9,10 +9,33 @@
 ////////////////////////////////////////////////////////////
 // Question 2A
 ////////////////////////////////////////////////////////////
-
+const mem = [];
+function read(n, k) {
+    return mem[n] === undefined
+    ? undefined 
+    : mem[n][k];
+}
+function write(n, k, value) { 
+    if (mem[n] === undefined) {
+        mem[n] = []; 
+        
+    }
+    mem[n][k] = value; 
+    
+}
 function all_different(nums) {
-
+    let arr = [];
+    for(let i = 0; i < length(nums); i = i + 1){
+        if (arr[list_ref(nums,i)] === undefined){
+            arr[list_ref(nums,i)] = 0;
+        }
+        else{
+            return false;
+        }
+    }
+    return true;
     // WRITE HERE.
+    
 
 }
 
@@ -25,6 +48,18 @@ function all_different(nums) {
 function is_valid_toto_set(nums, n, min, max) {
 
     // WRITE HERE.
+    if (length(nums) !== n){
+        return false;
+    }
+    else if (!all_different(nums)){
+        return false;
+    }
+    for (let i = 0; i < length(nums) ; i = i + 1){
+        if (list_ref(nums,i) < min || list_ref(nums,i) > max){
+            return false;
+        }
+    }
+    return true;
 
 }
 
@@ -35,10 +70,23 @@ function is_valid_toto_set(nums, n, min, max) {
 ////////////////////////////////////////////////////////////
 
 function num_of_matches(numsA, numsB) {
-
+    if (is_null(numsA) || is_null(numsB)){
+        return 0;
+    }
+    else{
+        let found = false;
+        let check = head(numsA);
+        if (!is_null(member(check,numsB))){
+            return 1 + num_of_matches(tail(numsA),remove(check,numsB));
+        }
+        else{
+            return num_of_matches(tail(numsA),numsB);
+        }
+        }
+    }
     // WRITE HERE.
 
-}
+
 
 
 
@@ -47,7 +95,35 @@ function num_of_matches(numsA, numsB) {
 ////////////////////////////////////////////////////////////
 
 function check_winning_group(bet_nums, draw_nums, extra_num) {
-
+    let match_extra_num = false;
+    let num_of_match_num = 0;
+    
+    
+    num_of_match_num = num_of_matches(bet_nums,draw_nums);
+    if (!is_null(member(extra_num,bet_nums))){
+        match_extra_num = true;
+    }
+    
+    if (num_of_match_num === length(draw_nums)){
+        return 1;
+    }
+    
+    else if (num_of_match_num === length(draw_nums) - 1 && match_extra_num){
+        return 2;
+    }
+    else if (num_of_match_num === length(draw_nums) - 1){
+        return 3;
+    }
+    else if (num_of_match_num === length(draw_nums) - 2 && match_extra_num){
+        return 4;
+    }
+    
+    else if (num_of_match_num === length(draw_nums) - 2){
+        return 5;
+    }
+    else{
+        return 0;
+    }
     // WRITE HERE.
 
 }
