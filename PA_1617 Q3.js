@@ -11,8 +11,32 @@
 ////////////////////////////////////////////////////////////
 
 function evaluate_BAE_tree(bae_tree) {
-
+    function lookup(sym){
+        return sym === "+"
+               ? (x,y) => x+y
+               : sym === "-"
+                 ? (x,y) => x-y
+                 : sym === "*"
+                   ? (x,y) => x * y
+                   : sym === "/"
+                     ? (x,y) => x/y
+                     : "UNKNOWN OPERATOR PLS GIVE UP";
+    }
     // WRITE HERE.
+    if (is_number(bae_tree)){
+        return bae_tree;
+    }
+    
+    else if (is_string(bae_tree)){
+        //display(bae_tree);
+        return lookup(bae_tree);
+    }
+
+    else if (is_list(bae_tree)){
+        return evaluate_BAE_tree(list_ref(bae_tree,1))
+               (evaluate_BAE_tree(list_ref(bae_tree,0)),evaluate_BAE_tree(list_ref(bae_tree,2)));
+    }
+    
 
 }
 
@@ -21,10 +45,54 @@ function evaluate_BAE_tree(bae_tree) {
 ////////////////////////////////////////////////////////////
 // Question 3B
 ////////////////////////////////////////////////////////////
-
+//implement a stack adt to keep aadding, then keep popping until ) spotted
+function push(elem,stack){
+    return append(stack,list(elem));//returns back updated stack
+}
+function pop(stack){
+    const n = length(stack) - 1;
+    const elem = list_ref(stack,n);
+    let copy = null;
+    for (let i = 0; i < n; i = i + 1){
+        copy = append(copy,list(list_ref(stack,i)));
+        
+    }
+    return pair(elem,copy);//returns a pair where the head is the element to be popped and coppy of stack
+    
+}
 function build_BAE_tree(bae_list) {
+    if (length(bae_list) === 1){
+        return head(bae_list);
+    }
+    let index = 0;
+    let stack = null;
+    while (index < length(bae_list) ){
+        const curr = list_ref(bae_list,index);
+        if (curr !== ")"){
+            stack = push(curr,stack);
+            //display_list(stack);
+            index = index + 1;
+        }
+        else{
+            let cut = "a";
+            let formed_bae = null;
+            while (cut !== "("){
+                const modified = pop(stack);
+                const elem = head(modified);
+                stack = tail(modified);
+                if (elem !== "("){
+                    formed_bae = pair(elem,formed_bae);
+                }
+                cut = elem;
 
-    // WRITE HERE.
+                //display_list(formed_bae);
+            }
+             
+            display_list(formed_bae);
+            return formed_bae;
+            
+        }
+    }
 
 }
 
