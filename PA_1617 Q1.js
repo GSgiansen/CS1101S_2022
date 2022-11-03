@@ -127,10 +127,60 @@ function find_gene_start(xs) {
 ////////////////////////////////////////////////////////////
 
 function find_gene_end(xs) {
+    
 
     // WRITE HERE.
+    //const stoppers = list(list("T","A", "G"),list("T", "G","A"),list("T","A", "A"));
+    let found = false;
+    let index = 0;
+    let completed = null;
+    //tranverse the list again to obtain wanted seq
+    while (index < length(xs) - 2){
+        
+        let stoppers = list(list("T","A", "G"),list("T", "G","A"),list("T","A","A"));
+        
+        // at each iteration refresh the stoppers and the check is unique to the index
+        while (!is_null(stoppers)){
+            let ref = head(stoppers);
+            let check = list(list_ref(xs,index),list_ref(xs,index + 1),list_ref(xs,index + 2));
+            let count = 0;
+            while (!is_null(check)){
+                //display_list(ref);
+                if (head(check) === head(ref)){
+                    count = count + 1;
+                }
+                check = tail(check);
+                ref = tail(ref);
+                
+            }
+            if (count === 3){
+                //display("hi");
+                found = true;//start from index +3 
+                break;
+            }
+            stoppers = tail(stoppers);
+        }
+        //display(found);
+        //end of the checking loop
+        if (found){
+            //display_list(completed);
+            return list(completed);
+        }
+        
+        else if (index < length(xs) -2){
+            completed = append(completed,list(list_ref(xs,index)));
+            index = index + 1;            
+        }
+    }
+    if (found){
+        return list(completed);
+    }
+    else{
+        return null;
+    }
 
 }
+
 
 
 
@@ -139,10 +189,20 @@ function find_gene_end(xs) {
 ////////////////////////////////////////////////////////////
 
 function all_genes(xs) {
-
+    const start = find_gene_start(xs);
+    if (is_null(start)){
+        return null;
+    }
+    const end = find_gene_end(head(start));
     // WRITE HERE.
+    display_list(end);
+    return end;
+    
 
 }
+display(all_genes(list("T", "A", "T", "G", "C", "A", "T",
+                                    "A", "A", "G", "T", "A", "G", "A",
+                                    "T", "G", "A", "T", "G", "A", "T")));
 
 
 
