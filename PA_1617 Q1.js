@@ -189,18 +189,44 @@ function find_gene_end(xs) {
 ////////////////////////////////////////////////////////////
 
 function all_genes(xs) {
-    const start = find_gene_start(xs);
-    if (is_null(start)){
-        return null;
+    let table = null;
+    function helper(xs){
+        let first_chunk_l = length(find_gene_end(xs)) + 6;
+        
+    
+        const start = find_gene_start(xs);
+        if (is_null(start)){
+            return null;
+        }
+        const end = find_gene_end(head(start));
+        // WRITE HERE.
+        //display_list(end);
+        
+        while(first_chunk_l > 0){
+            xs = tail(xs);
+            first_chunk_l = first_chunk_l - 1;
+        }
+        //display_list(xs);
+        if (length(xs) !== 0){
+            if (is_null(member(end,table))){
+                //display(end);
+                table = append(table,end);
+            }
+            return helper(xs);
+        }
+        
+      
     }
-    const end = find_gene_end(head(start));
-    // WRITE HERE.
-    display_list(end);
-    return end;
+    helper(xs);
+    display_list(table);
+    return table;
+
+    
+    //return end;
     
 
 }
-display(all_genes(list("T", "A", "T", "G", "C", "A", "T",
+display_list(all_genes(list("T", "A", "T", "G", "C", "A", "T",
                                     "A", "A", "G", "T", "A", "G", "A",
                                     "T", "G", "A", "T", "G", "A", "T")));
 
