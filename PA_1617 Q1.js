@@ -13,6 +13,15 @@
 function is_nucleobase(s) {
 
     // WRITE HERE.
+    return s === "G"
+           ? true
+           : s === "C"
+             ? true
+             : s === "A"
+               ? true 
+               : s === "T"
+                 ? true
+                 : false;
 
 }
 
@@ -25,6 +34,8 @@ function is_nucleobase(s) {
 function is_dna_strand(xs) {
 
     // WRITE HERE.
+    const check = filter(x => is_nucleobase(x), xs);
+    return length(check) === length(xs);
 
 }
 
@@ -37,6 +48,7 @@ function is_dna_strand(xs) {
 function combine(xss) {
 
     // WRITE HERE.
+    return accumulate(append,null,xss);
 
 }
 
@@ -49,6 +61,7 @@ function combine(xss) {
 function oxoguanine_repair(xs) {
 
     // WRITE HERE.
+    return map(x => (x === "8") ? "G" : x, xs);
 
 }
 
@@ -59,10 +72,53 @@ function oxoguanine_repair(xs) {
 ////////////////////////////////////////////////////////////
 
 function find_gene_start(xs) {
+    let index = 0;
+    let found = false;
+    while (index < length(xs) -2){
+        let check = list(list_ref(xs,index),list_ref(xs,index + 1),list_ref(xs,index + 2));
+        let ref = list("A", "T", "G");
+        let count = 0;
+        while (!is_null(check)){
+            //display_list(ref);
+            if (head(check) === head(ref)){
+                count = count + 1;
+            }
+            check = tail(check);
+            ref = tail(ref);
+            
+        }
+        if (count === 3){
+            //display("hi");
+            found = true;//start from index +3 
+            index = index + 3;
+            break;
+        }
+        else{ 
+            index = index + 1;
+        }
+    }
+    //isplay(index);
+    //display(found);
+    if (!found){
+        return null;
+    }
+    
+    else if (index < length(xs)){
+        while(index > 0){
+            xs = tail(xs);
+            index = index - 1;
+        }
+        return list(xs);
+    }
 
+    else{
+        return list(null);
+    }
     // WRITE HERE.
 
 }
+//display("SEPERATE TEST" + stringify(find_gene_start(find_gene_start(list("A", "T", "A", "G", "T", "A", "T", "G")))));
+
 
 
 
