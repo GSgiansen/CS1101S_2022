@@ -66,9 +66,10 @@ function build_BAE_tree(bae_list) {
     }
     let index = 0;
     let stack = null;
-    while (index < length(bae_list) ){
+    while (index < length(bae_list)-1 ){
         const curr = list_ref(bae_list,index);
         if (curr !== ")"){
+            display(curr);
             stack = push(curr,stack);
             //display_list(stack);
             index = index + 1;
@@ -89,14 +90,27 @@ function build_BAE_tree(bae_list) {
             }
              
             display_list(formed_bae);
-            return formed_bae;
+            //return formed_bae;
+            //display_list(stack);
+            if (is_null(stack)){
+                stack = formed_bae;
+            }
+            else{
+                stack = push(stack,formed_bae);
+            }
+            display_list(stack);
+            display("index "+ stringify(index));
+            index = index + 1;
+            //return stack;
             
         }
+        //return stack;
     }
+    //return stack;
 
 }
 
-
+const bae_tree = list(5, "*", list(7, "+", 3));
 
 ////////////////////////////////////////////////////////////
 // Question 3C
