@@ -137,6 +137,7 @@ function build_largest_int(digits) {
     for (let i = 0 ; i < array_length(ans) ; i = i + 1){
         st = st + stringify(ans[i]);
     }
+    //display(st);
     return st;
 
 }
@@ -161,15 +162,46 @@ assert("2A_6", () => build_largest_int([5,5,5,5,5,5,5,5,5,5]),
 // TASK 2B
 //===============================================================
 function build_2nd_largest_int(digits) {
-
+    if (array_length(digits) === 1){
+        return stringify(digits[0]);
+    }
+    let st = "";
+    let ans = copy_array(digits);
+    sort_ascending(ans);
+    reverse_array(ans);
+    //display(ans);
+    
+    
+    let index = array_length(digits) - 1;
+    const smallest_digit = ans[index];
+    let second_digit = ans[index];
+    while (second_digit === smallest_digit && index >0){
+        index = index - 1;
+        second_digit = ans[index];
+        
+    }
+    //display(index);
+    
+    const start = index;
+    swap(ans,start,index+1);
+    for (let i = 0 ; i < array_length(ans) ; i = i + 1){
+        st = st + stringify(ans[i]);
+    }
+    //display(st);
+    return st;
+    
+    //return null;
+    
     // WRITE HERE.
 
 }
+//display(build_2nd_largest_int([1]));
 
 
 // TASK 2B TESTS
 assert("2B_1", () => build_2nd_largest_int([1]),
-    "1", ["build_largest_int"]);
+  "1", ["build_largest_int"]);
+
 assert("2B_2", () => build_2nd_largest_int([1,2,3,4,5]),
     "54312", ["build_largest_int"]);
 assert("2B_3", () => build_2nd_largest_int([9,8,7]),
