@@ -173,29 +173,34 @@ assert("1C_6", () => big_int_add(
 // TASK 1D
 //===============================================================
 function big_int_mult_by_digit(bint, digit) {
-
+    if (digit === 0){
+        return list(0);
+    }
     // WRITE HERE.
     function helper(num,carry){
         //display(num);
         //display("carry is now "+ stringify(carry));
         if (is_null(num)){
-            return carry === 0 ? list(0) : pair(carry,num);
+            return carry === 0 ? null : pair(carry,null);
         }
         else{
             let temp = head(num) * digit + carry;
             let forward = math_floor(temp/10);
             if (temp % 10 === 0){
-                return helper(tail(num),forward);
+                return pair(0,helper(tail(num),forward));
             }
             return pair(temp % 10, helper(tail(num),forward));
         }
     }
     let ans = helper(bint,0);
+    if (ans === null){
+        return list(0);
+    }
     //display_list(ans);
     return ans;
 
 }
-
+//display(big_int_mult_by_digit(list(7,8,9),5));
 
 // TASK 1D TESTS
 assert("1D_1", () => big_int_mult_by_digit(list(0), 5),
@@ -208,7 +213,6 @@ assert("1D_4", () => big_int_mult_by_digit(
     list(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9), 3),
     list(3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,7,2),
     ["make_big_int_from_number", "big_int_add"]);
-
 
 //===============================================================
 // TASK 1E
@@ -239,29 +243,49 @@ assert("1E_3", () => big_int_mult_by_10_pow_n(list(7,4,3), 3),
 assert("1E_4", () => big_int_mult_by_10_pow_n(list(5,8,3,1), 20),
     list(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,8,3,1),
     ["make_big_int_from_number", "big_int_add", "big_int_mult_by_digit"]);
-
-
+/*
+display(big_int_mult_by_digit(list(7,8,9),6));
+display(big_int_mult_by_10_pow_n(big_int_mult_by_digit(list(7,8,9),6),1));
+display(big_int_mult_by_10_pow_n(list(5,3,9,4),2));
+display(big_int_add(big_int_mult_by_digit(list(7,8,9),6),big_int_mult_by_10_pow_n(list(5,3,9,4),2)));
+*/
+display(big_int_mult_by_digit(list(7, 8, 9),3));
 //===============================================================
 // TASK 1F
 //===============================================================
 function big_int_mult(bintX, bintY) {
-    if (is_null(tail(bintY))){
-        return big_int_mult_by_digit(bintX,head(bintY));
+    const n = length(bintY);
+    function helper(x,y){
+        ///display("y is " + stringify(y));
+        if (is_null(tail(y))){
+            let ans = big_int_mult_by_digit(x,head(y));
+            ans = big_int_mult_by_10_pow_n(ans,n-length(y));
+            //display_list(ans);
+            return ans;
+        }
+        const current_digit_y = head(y);
+        const length_y = n - length(y) ;
+        const a = big_int_mult_by_digit(x,current_digit_y);
+        //display_list(a);
+        const b = big_int_mult_by_10_pow_n(a,length_y);
+        //display_list(b);
+        return big_int_add(b,helper(x,tail(y)));        
     }
-    const current_digit_y = head(bintY);
-    const length_y = length(bintY);
-    const a = big_int_mult_by_digit(bintX,current_digit_y);
-    display_list(a);
-    const b = big_int_mult_by_10_pow_n(a,length_y);
-    display(b);
-    return big_int_add(big_int_mult_by_10_pow_n(a,length_y),big_int_mult(bintX, tail(bintY)));
+
+    //return big_int_add(b,big_int_mult(bintX, tail(bintY)));
 
     // WRITE HERE.
+    let ans = helper(bintX,bintY);
+    //display_list(ans);
+    return ans;
 
 }
+//display(big_int_mult_by_digit(list(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1),7));
+//display(big_int_add(list(0, 5, 3, 9, 4),list(2, 2, 9, 5)));
 
 
 // TASK 1F TESTS
+
 assert("1F_1", () => big_int_mult(list(0), list(0)),
     list(0),
     ["make_big_int_from_number", "big_int_add",
@@ -286,6 +310,8 @@ assert("1F_6", () => big_int_mult(list(7,8,9), list(5,6)),
     list(5,5,1,4,6),
     ["make_big_int_from_number", "big_int_add",
     "big_int_mult_by_digit", "big_int_mult_by_10_pow_n"]);
+
+
 assert("1F_7", () => big_int_mult(
     list(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1), list(7,8,9)),
     list(7,8,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,8,9),
