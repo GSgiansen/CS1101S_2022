@@ -187,12 +187,8 @@ function build_2nd_largest_int(digits) {
     for (let i = 0 ; i < array_length(ans) ; i = i + 1){
         st = st + stringify(ans[i]);
     }
-    //display(st);
+
     return st;
-    
-    //return null;
-    
-    // WRITE HERE.
 
 }
 //display(build_2nd_largest_int([1]));
@@ -218,17 +214,89 @@ assert("2B_6", () => build_2nd_largest_int([5,5,5,5,5,5,5,5,5,5]),
 // TASK 2C
 //===============================================================
 function build_nth_largest_int(digits, n) {
+    function permutations(ys) {
+        return is_null(ys)
+            ? list(null)
+            : accumulate(append, null,
+                map(x => map(p => pair(x, p),
+                             permutations(remove(x, ys))),
+                    ys));
+    }
+    let ans = permutations(array_to_list(digits));
+    function list_to_array(lst){
+        let n = length(lst);
+        let ans =[];
+        for (let i = 0; i < n; i = i + 1){
+            ans[i] = list_ref(lst,i);
+        }
+        return ans;
+    }
+    //display(ans);
+    function array_t_digits(arr){
+        let num = 0;
+        for(let i = 0; i < array_length(arr); i = i + 1){
+            num = num * 10 + arr[i];
+        }
+        return num;
+    }
+    function digit_to_array(digit){
+        let ans = [];
+        let count = 0;
+        while (digit >= 10){
+            const elem = digit % 10;
+            ans[count] = elem;
+            digit = math_floor(digit/10);
+            count = count + 1;
+        }
+        ans[count] = digit;
+        reverse_array(ans);
+        return ans;
+    }
+    function bubblesort_array(A) {
+        const len = array_length(A);
+        for (let i = len - 1; i >= 1; i = i - 1) {
+            for (let j = 0; j < i; j = j + 1) { 
+                if (A[j] > A[j + 1]) {
+                    const temp = A[j]; 
+                    A[j] = A[j + 1]; 
+                    A[j + 1] = temp;
+                    
+                } 
+                
+            }
+        }
+    }
 
-    // WRITE HERE.
 
+    //array_t_digits([9,8,5,4]);
+    ans = map(x => list_to_array(x), ans);
+    //display_list(ans);
+    
+    const o_ans = map(array_t_digits,ans);//list of digits
+
+    const for_sorting_ans = list_to_array(o_ans);
+    sort_ascending(for_sorting_ans);
+    reverse_array(for_sorting_ans);
+    n = (n > array_length(for_sorting_ans)) ? array_length(for_sorting_ans)-1 : n-1;
+    const answer = for_sorting_ans[n];
+    const b = digit_to_array(answer);
+
+    let st = "";
+    for (let i = 0 ; i < array_length(b) ; i = i + 1){
+        st = st + stringify(b[i]);
+    }
+
+    return st;
 }
 
 
 // TASK 2C TESTS
 assert("2C_1", () => build_nth_largest_int([1,2,4,3], 1),
     "4321", ["build_largest_int", "build_2nd_largest_int"]);
+    
 assert("2C_2", () => build_nth_largest_int([3,1,4,2], 2),
     "4312", ["build_largest_int", "build_2nd_largest_int"]);
+    
 assert("2C_3", () => build_nth_largest_int([3,1,4,2], 10),
     "3214", ["build_largest_int", "build_2nd_largest_int"]);
 assert("2C_4", () => build_nth_largest_int([1,3,4,2], 18),
