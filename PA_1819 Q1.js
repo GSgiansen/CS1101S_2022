@@ -245,6 +245,16 @@ assert("1E_4", () => big_int_mult_by_10_pow_n(list(5,8,3,1), 20),
 // TASK 1F
 //===============================================================
 function big_int_mult(bintX, bintY) {
+    if (is_null(tail(bintY))){
+        return big_int_mult_by_digit(bintX,head(bintY));
+    }
+    const current_digit_y = head(bintY);
+    const length_y = length(bintY);
+    const a = big_int_mult_by_digit(bintX,current_digit_y);
+    display_list(a);
+    const b = big_int_mult_by_10_pow_n(a,length_y);
+    display(b);
+    return big_int_add(big_int_mult_by_10_pow_n(a,length_y),big_int_mult(bintX, tail(bintY)));
 
     // WRITE HERE.
 
