@@ -119,14 +119,35 @@ function big_int_add(bintX, bintY) {
     // or remove it and write your own.
 
     function add(x, y, carry) {
+        //display_list(x);
         if (is_null(x) && is_null(y)) {
             return (carry === 0) ? null : pair(carry, null);
         } else {
-
+            if (is_null(x)){
+                if (carry + head(y) >= 10){
+                    return pair((carry+head(y))%10,add(x,tail(y),math_floor((carry+head(y))/10)));
+                }
+                return pair(carry + head(y) ,tail(y));
+            }
+            else if (is_null(y)){
+                if (carry + head(x) >= 10){
+                    return pair((carry+head(x))%10,add(tail(x),y,math_floor((carry+head(x))/10)));
+                }
+                return pair(carry + head(x) ,tail(x));
+            }
+            else{
+                let ix = head(x);
+                let iy = head(y);
+                let sum = ix + iy + carry;
+                let forward = sum % 10;
+                return pair(forward, add(tail(x),tail(y), math_floor(sum / 10)));               
+            }
             // WRITE HERE.
+            
 
         }
     }
+    //display(add(bintX, bintY, 0));
     return add(bintX, bintY, 0);
 }
 
