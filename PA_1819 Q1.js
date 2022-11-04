@@ -214,9 +214,15 @@ assert("1D_4", () => big_int_mult_by_digit(
 // TASK 1E
 //===============================================================
 function big_int_mult_by_10_pow_n(bint, n) {
-
+    //display(math_pow(10,n));
+    //n-1is the number of 0s to add in front
     // WRITE HERE.
-
+    if (length(bint) === 1 && head(bint) === 0){
+        return list(0);
+    }
+    let ans = append(build_list(x => 0,n),bint);
+    //display_list(ans);
+    return ans;
 }
 
 
