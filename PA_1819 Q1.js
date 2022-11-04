@@ -84,7 +84,12 @@ assert("1A_5", () => make_big_int_from_number(9876543210),
 // TASK 1B
 //===============================================================
 function big_int_to_string(bint) {
-
+    let ans = "";
+    while (!is_null(bint)){
+        ans = stringify(head(bint)) + ans ;
+        bint = tail(bint);
+    }
+    return ans;
     // WRITE HERE.
 
 }
