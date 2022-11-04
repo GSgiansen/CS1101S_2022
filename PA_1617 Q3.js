@@ -46,62 +46,63 @@ function evaluate_BAE_tree(bae_tree) {
 // Question 3B
 ////////////////////////////////////////////////////////////
 //implement a stack adt to keep aadding, then keep popping until ) spotted
-function push(elem,stack){
-    return append(stack,list(elem));//returns back updated stack
+function push(elem,stack){ 
+    return append(stack,list(elem));//returns back updated stack 
+} 
+function pop(stack){ 
+    const n = length(stack) - 1; 
+    const elem = list_ref(stack,n); 
+    let copy = null; 
+    for (let i = 0; i < n; i = i + 1){ 
+        copy = append(copy,list(list_ref(stack,i))); 
+         
+    } 
+    return pair(elem,copy);//returns a pair where the head is the element to be popped and coppy of stack 
+     
+} 
+function build_BAE_tree(bae_list) { 
+    if (length(bae_list) === 1){ 
+        return head(bae_list); 
+    } 
+    let index = 0; 
+    let stack = null; 
+    while (index < length(bae_list) ){ 
+        //display_list(stack); 
+        const curr = list_ref(bae_list,index); 
+        if (curr !== ")"){ 
+            //display("hi"); 
+            stack = push(curr,stack); 
+            //display_list(stack); 
+            index = index + 1; 
+        } 
+        else{ 
+            let cut = "a"; 
+            let formed_bae = null; 
+            while (cut !== "("){ 
+                const modified = pop(stack); 
+                const elem = head(modified); 
+                stack = tail(modified); 
+                if (elem !== "("){ 
+                    formed_bae = pair(elem,formed_bae); 
+                } 
+                cut = elem; 
+ 
+                //display_list(formed_bae); 
+            } 
+              
+            const e = formed_bae; 
+            //display(e); 
+            stack = push(e,stack); 
+            index = index + 1; 
+     
+        } 
+    } 
+    return head(stack); 
+ 
 }
-function pop(stack){
-    const n = length(stack) - 1;
-    const elem = list_ref(stack,n);
-    let copy = null;
-    for (let i = 0; i < n; i = i + 1){
-        copy = append(copy,list(list_ref(stack,i)));
-        
-    }
-    return pair(elem,copy);//returns a pair where the head is the element to be popped and coppy of stack
-    
-}
-function build_BAE_tree(bae_list) {
-    if (length(bae_list) === 1){
-        return head(bae_list);
-    }
-    let index = 0;
-    let stack = null;
-    while (index < length(bae_list) ){
-        //display_list(stack);
-        const curr = list_ref(bae_list,index);
-        if (curr !== ")"){
-            //display("hi");
-            stack = push(curr,stack);
-            //display_list(stack);
-            index = index + 1;
-        }
-        else{
-            let cut = "a";
-            let formed_bae = null;
-            while (cut !== "("){
-                const modified = pop(stack);
-                const elem = head(modified);
-                stack = tail(modified);
-                if (elem !== "("){
-                    formed_bae = pair(elem,formed_bae);
-                }
-                cut = elem;
-
-                //display_list(formed_bae);
-            }
-             
-            const e = formed_bae;
-            //display(e);
-            stack = push(e,stack);
-            index = index + 1;
-    
-        }
-    }
-    return head(stack);
-
-}
 
 
+const bae_tree = list(5, "*", list(7, "+", 3));
 
 ////////////////////////////////////////////////////////////
 // Question 3C
