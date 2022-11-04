@@ -175,6 +175,24 @@ assert("1C_6", () => big_int_add(
 function big_int_mult_by_digit(bint, digit) {
 
     // WRITE HERE.
+    function helper(num,carry){
+        //display(num);
+        //display("carry is now "+ stringify(carry));
+        if (is_null(num)){
+            return carry === 0 ? list(0) : pair(carry,num);
+        }
+        else{
+            let temp = head(num) * digit + carry;
+            let forward = math_floor(temp/10);
+            if (temp % 10 === 0){
+                return helper(tail(num),forward);
+            }
+            return pair(temp % 10, helper(tail(num),forward));
+        }
+    }
+    let ans = helper(bint,0);
+    //display_list(ans);
+    return ans;
 
 }
 
