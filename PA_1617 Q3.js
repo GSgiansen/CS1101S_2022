@@ -109,8 +109,9 @@ const bae_tree = list(5, "*", list(7, "+", 3));
 ////////////////////////////////////////////////////////////
 
 function evaluate_BAE(bae_list) {
-
+    const bae = build_BAE_tree(bae_list);
     // WRITE HERE.
+    return evaluate_BAE_tree(bae);
 
 }
 
@@ -121,10 +122,39 @@ function evaluate_BAE(bae_list) {
 ////////////////////////////////////////////////////////////
 
 function check_parentheses(paren_list) {
-
-    // WRITE HERE.
-
+    if (is_null(paren_list)){
+        return true;
+    }
+    let stack = null;
+    let index = 0;
+    while (index < length(paren_list)){
+        //display_list(stack);
+        const curr = list_ref(paren_list,index);
+        if (curr === "("){
+        
+            stack = push(curr,stack);
+        }
+        else if (curr === ")"){
+            
+            const temp = pop(stack);
+            const elem = head(temp);
+            while (elem !== "("){
+                const temp = pop(stack);
+                const elem = head(temp);
+                stack = tail(temp);
+            }
+            //stack = tail(temp);
+        }
+        index = index + 1;
+    }
+    if (length(stack) !== 0){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
+    // WRITE HERE.
 
 
 
