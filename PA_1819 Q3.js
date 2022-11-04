@@ -53,7 +53,27 @@ function assert(test_name, test_func, truth, dependence) {
 // TASK 3A(I)
 //===============================================================
 function count_lower_neighbors(emap, r, c) {
-
+    const m = array_length(emap);
+    const n = array_length(emap[0]);
+    const possible_moves = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+    if (r === 0 || c === 0 || r >= m-1 || c >= n-1){
+        //display("r is "+ stringify(r));
+        return 0;
+    }
+    let num = 0;
+    for (let i = 0; i < array_length(possible_moves); i = i + 1){
+        const new_r = r + possible_moves[i][0];
+        const new_c = c + possible_moves[i][1];
+        
+        if ((0 < new_r && new_r < m ) && (0 < new_c && new_c < n)){
+            //display_list(pair(new_r,new_c));
+            if (emap[new_r][new_c] < emap[r][c]){
+                num = num + 1;
+            }
+        }
+    }
+    //display(num);
+    return num;
     // WRITE HERE.
 
 }
