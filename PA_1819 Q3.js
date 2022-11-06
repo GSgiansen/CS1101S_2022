@@ -155,11 +155,11 @@ assert("3A(II)_4", () => count_peaks(emapA2b),
 function count_islands(emap) {
     const m = array_length(emap);
     const n = array_length(emap[0]);
-    
+    let islands = 0;
     function bfs(map,i,j){
         if ((0 <= i && i < m ) && (0 <= j && j < n)){
-            if (map[i][j] !== 0 && map[i][j] !== "#"){.//unexplored
-                
+            if (map[i][j] !== 0 && map[i][j] !== "#"){//unexplored
+                map[i][j] = "#";
                 return 1 + bfs(map, i + 1,j) + bfs(map, i - 1,j) + 
                            bfs(map, i ,j + 1) + bfs(map, i,j - 1);
             
@@ -173,7 +173,16 @@ function count_islands(emap) {
         return 0;
 
     }
-
+    for(let i = 0 ; i < m; i = i + 1){
+        for (let j = 0; j < n; j = j + 1){
+            //display(emap[i][j]);
+            let count = bfs(emap, i, j);
+            if (count > 0){
+                islands = islands + 1;
+            }
+        }
+    }
+    return islands;
     // WRITE HERE.
 
 }
