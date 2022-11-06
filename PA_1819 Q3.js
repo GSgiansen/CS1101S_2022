@@ -65,7 +65,7 @@ function count_lower_neighbors(emap, r, c) {
         const new_r = r + possible_moves[i][0];
         const new_c = c + possible_moves[i][1];
         
-        if ((0 < new_r && new_r < m ) && (0 < new_c && new_c < n)){
+        if ((0 <= new_r && new_r < m ) && (0 <= new_c && new_c < n)){
             //display_list(pair(new_r,new_c));
             if (emap[new_r][new_c] < emap[r][c]){
                 num = num + 1;
@@ -77,7 +77,7 @@ function count_lower_neighbors(emap, r, c) {
     // WRITE HERE.
 
 }
-
+//display("ans is " + stringify(count_lower_neighbors([[2,3,4],[3,5,3],[4,3,2]],1,1)));
 
 // TASK 3A(I) TESTS
 const emapA1 =
@@ -101,6 +101,20 @@ assert("3A(I)_8", () => count_lower_neighbors(emapA1, 4, 4), 6, []);
 // TASK 3A(II)
 //===============================================================
 function count_peaks(emap) {
+    let count = 0;
+    const m = array_length(emap);
+    const n = array_length(emap[0]);
+    
+    for(let i = 0 ; i < m; i = i + 1){
+        for (let j = 0; j < n; j = j + 1){
+            //display(emap[i][j]);
+            if (count_lower_neighbors(emap, i, j) === 8){
+                count = count + 1;
+            }
+        }
+    }
+    display(count);
+    return count;
 
     // WRITE HERE.
 
@@ -139,6 +153,26 @@ assert("3A(II)_4", () => count_peaks(emapA2b),
 // TASK 3B
 //===============================================================
 function count_islands(emap) {
+    const m = array_length(emap);
+    const n = array_length(emap[0]);
+    
+    function bfs(map,i,j){
+        if ((0 <= i && i < m ) && (0 <= j && j < n)){
+            if (map[i][j] !== 0 && map[i][j] !== "#"){.//unexplored
+                
+                return 1 + bfs(map, i + 1,j) + bfs(map, i - 1,j) + 
+                           bfs(map, i ,j + 1) + bfs(map, i,j - 1);
+            
+            
+            }
+            else{
+                return 0;
+                
+            }
+        }
+        return 0;
+
+    }
 
     // WRITE HERE.
 
