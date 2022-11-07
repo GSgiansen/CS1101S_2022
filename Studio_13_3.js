@@ -17,34 +17,45 @@ tail(Cindy)[0] = Dylan;
 
 
 //for array extensions
-
-
 function get_suspects(all_students, custodian) {
     let grey = [custodian];
     let black = [];
-    // You don't actually need an array for white
-    let queue = list();
-    function copy_arr(arr){
-        let res = [];
-        for(let i = 0; i< array_length(arr); i = i +1){
-            res[i] = arr[i];
+    while (array_length(grey) > 0) {
+        const curr = grey[0];
+        grey = remove_elem(grey, 0);
+        const neighbours = tail(curr);
+        for (let i = 0; i < array_length(neighbours); i = i + 1) {
+            if (!in_array(neighbours[i], grey) && !in_array(neighbours[i], black)) {
+                grey[array_length(grey)] = neighbours[i];
+            }
         }
-        return res;
+        black[array_length(black)] = curr;
     }
-    
-    function enqueue(x) {
-        queue = append(queue, list(x));
+    const result = [];
+    for (let i = 0; i < array_length(black); i = i + 1) {
+        result[i] = head(black[i]);
     }
-    
-    function dequeue() {
-        if (is_null(queue)) {
-            error("dequeue() cannot be done on a queue of size 0.");
+    return result;
+}
+
+function remove_elem(arr, index) {
+    const new_arr = [];
+    for (let i = 0; i < index; i = i + 1) {
+        new_arr[array_length(new_arr)] = arr[i];
+    }
+    for (let i = index + 1; i < array_length(arr); i = i + 1) {
+        new_arr[array_length(new_arr)] = arr[i];
+    }
+    return new_arr;
+}
+
+function in_array(elem, arr) {
+    for (let i = 0; i < array_length(arr); i = i + 1) {
+        if (arr[i] === elem) {
+            return true;
         }
-        
-        const ans = head(queue);
-        queue = tail(queue);
-        return ans;
     }
+    return false;
 }
 
 get_suspects(students, custodian); // ["Betty", "Cindy", "Dylan"] in any order
