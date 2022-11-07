@@ -213,6 +213,7 @@ assert("2B_6", () => build_2nd_largest_int([5,5,5,5,5,5,5,5,5,5]),
 //===============================================================
 // TASK 2C
 //===============================================================
+/*
 function build_nth_largest_int(digits, n) {
     function permutations(ys) {
         return is_null(ys)
@@ -288,7 +289,31 @@ function build_nth_largest_int(digits, n) {
 
     return st;
 }
+*/
+function build_nth_largest_int(digits, n) {
+    // WRITE HERE.
+    // ---BEGIN TASK---
+    function permutations(ys) {
+        return is_null(ys)
+            ? list(null)
+            : accumulate(append, null,
+                map(x => map(p => pair(x, p),
+                             permutations(remove(x, ys))),
+                    ys));
+    }
 
+    const S = copy_array(digits);
+    const len = array_length(S);
+    sort_ascending(S);
+    reverse_array(S);
+    const digit_lst = array_to_list(S);
+    const perms = permutations(digit_lst);
+    display_list(perms);
+    const nth_lst = list_ref(perms, math_min(length(perms), n) - 1);
+    const nth = list_to_array(nth_lst);
+    return digits_to_string(nth);
+    // ---END TASK---
+}
 
 // TASK 2C TESTS
 assert("2C_1", () => build_nth_largest_int([1,2,4,3], 1),
